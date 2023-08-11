@@ -6,6 +6,7 @@ import os
 shell.executable("bash")
 
 workdir: "."
+absdir =  os.path.abspath(".")
 configfile: "config.yaml"
 
 config["samples"] = {str(k): v for k, v in config["samples"].items()}
@@ -32,7 +33,7 @@ rule subsample:
         "trim-map"
     message: "Step 1 - subsampling cleaned up reads if excess > 100K exist"
     shell:
-        "reformat.sh"
+        "docker exec -w {absdir} bbtools reformat.sh"
         " in1={input.R1_fastq}"
         " in2={input.R2_fastq}"
         " out1={output.O1}"
@@ -88,7 +89,7 @@ rule bbduk_r1:
     benchmark:
         "logs/benchmarks/bbduk_r1_{sample}.log"
     shell:
-        "docker exec staphb/bbtools bbduk.sh"
+        "docker exec -w {absdir} bbtools bbduk.sh"
 
         " in1={input.r1} in2={input.r2}"
         " out1={output.O1} out2={output.O2}"
@@ -123,7 +124,7 @@ rule bbduk_r2:
     benchmark:
         "logs/benchmarks/bbduk_r2_{sample}.log"
     shell:
-        "docker exec staphb/bbtools bbduk.sh"
+        "docker exec -w {absdir}  bbtools bbduk.sh"
         " in1={input.r1} in2={input.r2}"
         " out1={output.o1} out2={output.o2}"
         " {params.bbdukParams1} " 
