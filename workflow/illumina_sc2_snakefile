@@ -85,7 +85,7 @@ rule bbduk_r1:
     log:
         out = "logs/{sample}.bbduk.trim_left.stdout.log",
         err = "logs/{sample}.bbduk.trim_left.stderr.log"
-    threads: 16
+    threads: 4
     benchmark:
         "logs/benchmarks/bbduk_r1_{sample}.log"
     shell:
@@ -117,7 +117,7 @@ rule bbduk_r2:
         'minlength=0',
         'k=17',
         'restrictright=30'])
-    threads: 16
+    threads: 4
     log:
         out = "logs/{sample}.bbduk.trim_right.stdout.log",
         err = "logs/{sample}.bbduk.trim_right.stderr.log"
